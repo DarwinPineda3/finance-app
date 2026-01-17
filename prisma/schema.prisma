@@ -8,33 +8,78 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum Role {
-  ADMIN
-  USER
-}
-
-enum MovementType {
-  INCOME
-  EXPENSE
-}
-
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  phone     String?
-  role      Role     @default(ADMIN)
-  movements Movement[]
-  createdAt DateTime @default(now())
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  role          String    @default("ADMIN") 
+  phone         String?                     
+  movements     Movement[]
+
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
 }
 
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+// MODELO PARA GESTIÓN DE INGRESOS Y EGRESOS
 model Movement {
-  id        String        @id @default(cuid())
-  type      MovementType
+  id        String   @id @default(cuid())
   concept   String
   amount    Float
-  date      DateTime
-  user      User          @relation(fields: [userId], references: [id])
+  date      DateTime @default(now())
+  type      String  
   userId    String
-  createdAt DateTime      @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("movement")
 }

@@ -24,6 +24,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "pages/api/auth/[...all].ts"  ],
   "exclude": ["node_modules"]
 }
