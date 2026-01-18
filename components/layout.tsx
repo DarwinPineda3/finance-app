@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <header className="border-b bg-white p-4 flex justify-between items-center">
         <nav className="flex gap-6 font-bold text-black">
           <Link href="/dashboard" className="hover:text-primary">Movimientos</Link>
-          {session?.user.role === "ADMIN" && (
+          {(session?.user as any)?.role === "ADMIN" && (
             <>
               <Link href="/users" className="hover:text-primary">Usuarios</Link>
               <Link href="/reports" className="hover:text-primary">Reportes</Link>
