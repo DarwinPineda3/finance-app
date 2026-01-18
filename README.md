@@ -125,14 +125,6 @@ git clone <https://github.com/DarwinPineda3/finance-app.git>
 cd finance-app
 npm install
 
-Crear archivo .env:
-
-DATABASE_URL
-BETTER_AUTH_SECRET
-GITHUB_CLIENT_ID
-GITHUB_CLIENT_SECRET
-NEXT_PUBLIC_APP_URL
-
 Sincronizar la base de datos:
 npx prisma db push
 
