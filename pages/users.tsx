@@ -41,8 +41,9 @@ export default function UsersPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-2 mb-8">
         <h1 className="text-2xl font-bold text-slate-900">Gestión de Usuarios</h1>
+        <p className="text-slate-600 mt-2 font-medium">Administra los accesos y roles del personal</p>
         
         <div className="rounded-md border">
           <Table>

@@ -1,28 +1,26 @@
-import Layout from "../components/layout";
-import { Card, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
-import Link from "next/link";
-import { Users, BarChart3, Wallet } from "lucide-react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { authClient } from "@/lib/auth/client";
 
-export default function HomePage() {
-  const menuItems = [
-    { title: "Gestión de Movimientos", desc: "Ingresos y Egresos", icon: <Wallet />, href: "/dashboard" },
-    { title: "Gestión de Usuarios", desc: "Solo Administradores", icon: <Users />, href: "/users" },
-    { title: "Reportes", desc: "Gráficos y Exportación", icon: <BarChart3 />, href: "/reports" },
-  ];
+export default function IndexPage() {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (!isPending) {
+      if (session) {
+        router.push("/dashboard");
+      } else {
+        router.push("/login");
+      }
+    }
+  }, [session, isPending, router]);
 
   return (
-    <Layout>
-      <div className="grid gap-6 md:grid-cols-3 mt-10">
-        {menuItems.map((item) => (
-          <Link href={item.href} key={item.href}>
-            <Card className="hover:bg-slate-50 cursor-pointer transition-colors h-48 flex flex-col justify-center items-center text-center">
-              <div className="mb-4 text-primary">{item.icon}</div>
-              <CardTitle>{item.title}</CardTitle>
-              <CardDescription>{item.desc}</CardDescription>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </Layout>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <p className="text-lg font-medium animate-pulse text-slate-600">
+        Verificando sesión...
+      </p>
+    </div>
   );
 }

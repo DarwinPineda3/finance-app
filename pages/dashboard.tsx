@@ -1,101 +1,37 @@
-import { useEffect, useState } from "react";
 import Layout from "../components/layout";
+import Link from "next/link";
+import { Card, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { authClient } from "../lib/auth/client";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { NewMovementDialog } from "../components/NewMovementDialog";
 
 export default function DashboardPage() {
   const { data: session } = authClient.useSession();
-  const [movements, setMovements] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchMovements = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/movements");
-      if (res.ok) {
-        const data = await res.json();
-        setMovements(data);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (session) fetchMovements();
-  }, [session]);
-
-  const totalIncomes = movements
-    .filter((m: any) => m.type === "INCOME")
-    .reduce((acc, curr: any) => acc + curr.amount, 0);
-    
-  const totalExpenses = movements
-    .filter((m: any) => m.type === "EXPENSE")
-    .reduce((acc, curr: any) => acc + curr.amount, 0);
-
-  const balance = totalIncomes - totalExpenses;
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Panel de Control</h1>
-            <p className="text-slate-600 mt-2 font-medium">Resumen de tus finanzas</p>
-          </div>
-          <NewMovementDialog onRefresh={fetchMovements} />
-        </div>
+      <div className="py-8">
+        <h1 className="text-3xl font-bold mb-8 text-black">Bienvenido, {session?.user.name}</h1>
+        <div className="grid gap-6 md:grid-cols-3">
+          <Link href="/movements">
+            <Card className="hover:border-blue-500 cursor-pointer transition-all h-48 flex flex-col justify-center items-center text-center">
+              <CardTitle>Gestión de Movimientos</CardTitle>
+              <CardDescription className="mt-2">Ingresos y Egresos</CardDescription>
+            </Card>
+          </Link>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader className="text-sm font-medium">Ingresos</CardHeader>
-            <CardContent className="text-2xl font-bold text-green-600">${totalIncomes.toFixed(2)}</CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="text-sm font-medium">Egresos</CardHeader>
-            <CardContent className="text-2xl font-bold text-red-600">${totalExpenses.toFixed(2)}</CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="text-sm font-medium">Saldo</CardHeader>
-            <CardContent className={`text-2xl font-bold ${balance < 0 ? 'text-red-700' : 'text-blue-700'}`}>
-              ${balance.toFixed(2)}
-            </CardContent>
-          </Card>
-        </div>
+          <Link href="/users">
+            <Card className="hover:border-blue-500 cursor-pointer transition-all h-48 flex flex-col justify-center items-center text-center">
+              <CardTitle>Gestión de Usuarios</CardTitle>
+              <CardDescription className="mt-2">Solo Administradores</CardDescription>
+            </Card>
+          </Link>
 
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-slate-900 font-bold">Concepto</TableHead>
-                <TableHead className="text-slate-900 font-bold">Fecha</TableHead>
-                <TableHead className="text-slate-900 font-bold">Tipo</TableHead>
-                <TableHead className="text-slate-900 font-bold text-right">Monto</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow><TableCell colSpan={4} className="text-center">Cargando...</TableCell></TableRow>
-              ) : movements.map((m: any) => (
-                <TableRow key={m.id}>
-                  <TableCell>{m.concept}</TableCell>
-                  <TableCell>{new Date(m.date).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <Badge variant={m.type === "INCOME" ? "default" : "destructive"}>
-                      {m.type === "INCOME" ? "Ingreso" : "Egreso"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">${m.amount.toFixed(2)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+          <Link href="/reports">
+            <Card className="hover:border-blue-500 cursor-pointer transition-all h-48 flex flex-col justify-center items-center text-center">
+              <CardTitle>Reportes</CardTitle>
+              <CardDescription className="mt-2">Gráficos y Exportación</CardDescription>
+            </Card>
+          </Link>
+        </div>
       </div>
     </Layout>
   );

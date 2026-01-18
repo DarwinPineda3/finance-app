@@ -71,12 +71,16 @@ export default function ReportsPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-slate-900">Reportes Financieros</h1>
-          <Button onClick={downloadCSV} className="font-bold bg-slate-900 hover:bg-slate-800 text-white">
-            <Download size={16} className="mr-2" /> Descargar CSV
-          </Button>
+      <div className="mb-8">
+        <div className="flex justify-between items-start"> 
+          <div> 
+            <h1 className="text-2xl font-bold text-slate-900">Reportes Financieros</h1>
+            <p className="text-slate-600 mt-2 font-medium">Análisis detallado de ingresos y egresos</p>
+          </div>
+
+      <Button onClick={downloadCSV} className="font-bold bg-slate-900 hover:bg-slate-800 text-white">
+        <Download size={16} className="mr-2" /> Descargar CSV
+      </Button>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
