@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma"; 
 import { auth } from "../../lib/auth/auth";
+import { convertHeaders } from "../../lib/auth/requireAuth"; 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
- 
-  const session = await auth.api.getSession({ headers: req.headers });
+  const headers = convertHeaders(req.headers); 
+  const session = await auth.api.getSession({ headers });
   
   if (!session) {
     return res.status(401).json({ error: "No autorizado" });

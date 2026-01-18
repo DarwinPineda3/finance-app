@@ -16,14 +16,14 @@ export default function UsersPage() {
 
   // Proteger la ruta ADMIN
   useEffect(() => {
-    if (!isPending && (!session || session.user.role !== "ADMIN")) {
+    if (!isPending && (!session || (session.user as any).role !== "ADMIN")) {
       router.push("/");
     }
   }, [session, isPending, router]);
 
   // Cargar usuarios
   useEffect(() => {
-    if (session?.user.role === "ADMIN") {
+    if (session && (session.user as any).role === "ADMIN") {
       fetch("/api/users")
         .then(res => res.json())
         .then(data => setUsers(data));
@@ -37,7 +37,7 @@ export default function UsersPage() {
   };
 
   if (isPending) return <Layout><p>Cargando sesión...</p></Layout>;
-  if (!session || session.user.role !== "ADMIN") return null;
+  if (!session || (session.user as any).role !== "ADMIN") return null;
 
   return (
     <Layout>
@@ -82,7 +82,6 @@ export default function UsersPage() {
         </div>
       </div>
 
-      
       <Dialog open={!!editingUser} onOpenChange={() => setEditingUser(null)}>
         <DialogContent>
           <DialogHeader>

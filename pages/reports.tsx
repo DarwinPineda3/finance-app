@@ -5,8 +5,15 @@ import { Button } from "../components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
 import { Download } from "lucide-react";
 
+
+interface ChartData {
+  name: string;
+  Ingresos: number;
+  Egresos: number;
+}
+
 export default function ReportsPage() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<ChartData[]>([]);
   const [totalIngresos, setTotalIngresos] = useState(0);
   const [totalEgresos, setTotalEgresos] = useState(0);
   const [totalBalance, setTotalBalance] = useState(0);
@@ -18,7 +25,7 @@ export default function ReportsPage() {
       .then(res => res.json())
       .then(movements => {
   
-        const groupedData: any = {};
+         const groupedData: Record<string, ChartData> = {};
         
         movements.forEach((m: any) => {
           if (!groupedData[m.concept]) {
@@ -121,7 +128,7 @@ export default function ReportsPage() {
                 <Tooltip 
                   cursor={{ fill: '#f8fafc' }}
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
-                  formatter={(value: number) => `$${value.toLocaleString()}`}
+                  formatter={(value: number | undefined) => `$${(value ?? 0).toLocaleString()}`}
                 />
                 <Legend 
                   wrapperStyle={{ paddingTop: '20px' }}
