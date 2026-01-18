@@ -1,23 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/lib/prisma";
-import { checkRole } from "@/lib/auth/requireAuth";
+import { auth } from "@/lib/auth/auth"; // Asegúrate que esta ruta a tu config de auth sea correcta
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // función de RBAC
-  const session = await checkRole(req, res, "ADMIN");
-  if (!session) return;
+export async function checkRole(req: NextApiRequest, res: NextApiResponse, requiredRole: string) {
+  const session = await auth.api.getSession({ headers: req.headers });
 
-  if (req.method === "GET") {
-    try {
-      const movements = await prisma.movement.findMany({
-        where: { userId: session.user.id },
-        orderBy: { date: "desc" },
-      });
-      return res.status(200).json(movements);
-    } catch (error) {
-      return res.status(500).json({ message: "Error al obtener datos" });
-    }
+  if (!session) {
+    res.status(401).json({ message: "No autenticado" });
+    return null;
   }
 
-  return res.status(405).json({ message: "Método no permitido" });
+  if (requiredRole === "ADMIN" && session.user.role !== "ADMIN") {
+    res.status(403).json({ message: "Acceso denegado: Se requiere rol ADMIN" });
+    return null;
+  }
+
+  return session;
 }
