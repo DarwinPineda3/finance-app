@@ -28,7 +28,7 @@ Jest
 React Testing Library
 
 Despliegue
-Vercel
+Netlify
 
 👥 Roles y Permisos (RBAC)
 
@@ -131,19 +131,18 @@ npx prisma db push
 Ejecutar el proyecto:
 npm run dev
 
-☁️ Despliegue en Vercel
-Conectar el repositorio a Vercel
+☁️ Despliegue en Netlify
+Conectar el repositorio a Netlify
 Configurar las variables de entorno
 Deploy automático
 
 🔗 URL del proyecto desplegado:
 
-(URL de Vercel PENDIENTE)
+[https://extraordinary-marigold-c7e04f.netlify.app](https://extraordinary-marigold-c7e04f.netlify.app)
 
 📦 Entregables
 Repositorio GitHub con el código fuente
-
-Proyecto desplegado en Vercel
+Proyecto desplegado en Netlify
 Archivo README con instrucciones claras
 Variables de entorno compartidas según lo solicitado
 
